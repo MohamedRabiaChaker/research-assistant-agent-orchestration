@@ -26,13 +26,11 @@ agent_registry = {
 
 
 @dataclass
-class Workflow:
-    id: str
-    tasks: list[Task]
-    started_at: datetime
-    finished_at: datetime
-    total_tokens: int
-    current_step: str
+class Finding:
+    title: str
+    source: str
+    content: str
+    confidence: float
 
 
 @dataclass
@@ -44,20 +42,32 @@ class ExecutionError:
 
 
 @dataclass
+class Workflow:
+    id: str
+    tasks: list[Task]
+    user_input: str
+    workflow_runs: list[WorkflowRun]
+
+
+@dataclass
+class WorkflowRun:
+    started_at: datetime
+    finished_at: datetime
+    total_tokens: int
+    current_step: str
+    logs: list[str]
+    report: dict
+    knowledge: list[dict]
+    tasks: list[Task]
+
+
+@dataclass
 class Task:
     id: str
     type: TaskType
     depends_on: list[str]
     runs: list[TaskRun]
     workflow: str
-
-
-@dataclass
-class Finding:
-    title: str
-    source: str
-    content: str
-    confidence: float
 
 
 @dataclass
@@ -71,11 +81,3 @@ class TaskRun:
     errors: list[dict]
     output: list[Finding] | None
     runtime_prarmeters: dict
-
-
-@dataclass
-class State:
-    user_input: str
-    tasks: list[Task]
-    facts: list[Finding]
-    report: str
