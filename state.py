@@ -1,8 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-
-from agents import AggregationAgent, ResearchAgent, ValidationAgent
 
 
 class TaskType(Enum):
@@ -16,13 +16,6 @@ class TaskStatus(Enum):
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     FAILED = "failed"
-
-
-agent_registry = {
-    TaskType.AGGREGATION: AggregationAgent,
-    TaskType.RESEARECH: ResearchAgent,
-    TaskType.VALIDATION: ValidationAgent,
-}
 
 
 @dataclass
@@ -68,6 +61,7 @@ class Task:
     depends_on: list[str]
     runs: list[TaskRun]
     workflow: str
+    parameters: dict = None
 
 
 @dataclass

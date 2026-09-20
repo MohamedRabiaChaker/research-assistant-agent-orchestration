@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from engine.orchestrator import Orchestrator
+
 app = FastAPI()
+orchestrator = Orchestrator()
 
 
 class ResearchRequest(BaseModel):
-    prompt: str
+    topic: str
 
 
 @app.get("/health")
@@ -14,8 +17,6 @@ def health_endpoint():
 
 
 @app.post("/research")
-def trigger_research(request):
-    try:
-        return {"message": f"Research request triggered for prompt {request.prompt}"}
-    except Exception:
-        return {"message": "Error Processing request, please check payload"}
+def trigger_research(request: ResearchRequest):
+    findings = orchestrator.execute(request.topic)
+    return {"findings": findings}
